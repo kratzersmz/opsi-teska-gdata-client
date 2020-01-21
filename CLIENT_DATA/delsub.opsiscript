@@ -1,0 +1,27 @@
+Set $UninstallProgram$ = $InstallDir$ + "\unins000.exe"
+
+Message "Uninstalling " + $ProductId$ + " ..."
+if FileExists($UninstallProgram$)
+	comment "Uninstall program found, starting uninstall"
+	Winbatch_uninstall
+endif
+
+comment "Delete files"
+Files_uninstall
+
+[Winbatch_uninstall]
+;"$UninstallProgram$" /SILENT /NORESTART
+%ScriptPath%\GDClientPck.exe /_QuietInstallation=true /InstallMode=Uninstall
+
+IF NOT EXIST "C:\Program Files (x86)\" (
+  REM 32-Bit
+  IF NOT EXIST "C:\Program Files\G DATA\AVKClient\AVKCl.exe" "\\s1\pgmpacks$\GDataAVKClient\GDClientPck.exe"
+) ELSE (
+  REM 64-Bit
+  IF NOT EXIST "C:\Program Files (x86)\G DATA\AVKClient\AVKCl.exe" "\\s1\pgmpacks$\GDataAVKClient\GDClientPck.exe"
+)
+
+
+
+[Files_uninstall]
+del -sf "$InstallDir$\"

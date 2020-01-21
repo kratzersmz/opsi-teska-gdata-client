@@ -1,0 +1,53 @@
+[Actions]
+requiredWinstVersion >= "4.11.3.3"
+
+DefVar $LogDir$
+DefVar $ProductId$  
+DefVar $MinimumSpace$
+DefVar $ExitCode$
+DefVar $ErrorMsg$
+DefVar $InstallDir$
+DefVar $UninstallProgram$
+DefVar $LicenseRequired$
+DefVar $LicenseKey$
+DefVar $LicensePool$
+;DefVar $ExecutableFile$
+
+Set $LogDir$ = "%SystemDrive%\tmp"
+;Set $ExecutableFile$ = ' /_QuietInstallation="true" /InstallMode="Install"'
+
+; ----------------------------------------------------------------
+Set $ProductId$       = "teska-gdata-client"
+Set $MinimumSpace$    = "600 MB"
+Set $InstallDir$      = "%ProgramFilesDir%\G DATA"
+Set $LicenseRequired$ = "false"
+Set $LicensePool$     = "p_" + $ProductId$
+; ----------------------------------------------------------------
+
+if not(HasMinimumSpace ("%SystemDrive%", $MinimumSpace$))
+	LogError "Not enough space on %SystemDrive%, " + $MinimumSpace$ + " on drive %SystemDrive% needed for " + $ProductId$
+	isFatalError "No Space"
+	; Stop process and set installation status to failed
+else
+	comment "Show product picture"
+	ShowBitmap "%ScriptPath%\" + $ProductId$ + ".png" $ProductId$
+	
+	if FileExists("%ScriptPath%\delsub.opsiscript")
+		comment "Start uninstall sub section"
+		Sub "%ScriptPath%\delsub.opsiscript"
+	endif
+	
+	Message "Installing " + $ProductId$ + " ..."
+	comment "Start setup program"
+	ChangeDirectory "%SCRIPTPATH%"
+	Winbatch_install
+	;DosInAnIcon_batch
+	
+endif
+
+;[DosInAnIcon_batch]
+;"%ScriptPath%\GDClientPck.exe" /_QuietInstallation="true"
+
+[Winbatch_install]
+;comment "%ScriptPath%\GDClientPck.exe" /^_QuietInstallation=^"true^"
+%ScriptPath%\GDClientPck.exe /_QuietInstallation=true

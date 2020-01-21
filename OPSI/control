@@ -1,0 +1,26 @@
+[Package]
+version: 1
+depends: 
+
+[Product]
+type: localboot
+id: teska-gdata-client
+name: G Data Client Package
+description: 
+advice: 
+version: 14.2
+priority: 0
+licenseRequired: False
+productClasses: 
+setupScript: setup.opsiscript
+uninstallScript: uninstall.opsiscript
+updateScript: 
+alwaysScript: 
+onceScript: 
+customScript: 
+userLoginScript: 
+
+[Changelog]
+sit-gdata_client_package (13.0-1) stable; urgency=low
+
+
